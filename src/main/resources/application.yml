@@ -15,14 +15,10 @@ spring:
   threads:
     virtual:
       enabled: true
-  # Default profile runs with the in-memory store and no database at all.
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
-      - org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration
-      - org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
+  profiles:
+    # With no profile set, run the "memory" profile: no database needed (mvn spring-boot:run, tests).
+    # docker compose sets SPRING_PROFILES_ACTIVE=postgres.
+    default: memory
 
 roster:
   store: memory
@@ -64,9 +60,22 @@ management:
 spring:
   config:
     activate:
-      on-profile: postgres
+      on-profile: memory
   autoconfigure:
-    exclude: ""
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
+      - org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration
+      - org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
+roster:
+  store: memory
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/roster}
     username: ${DB_USER:roster}
