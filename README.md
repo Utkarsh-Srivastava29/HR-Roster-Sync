@@ -169,8 +169,3 @@ src/main/java/com/moveinsync/roster
 └── bench/               Benchmark, SyntheticRoster
 samples/                 HR batches and exports used by the demo
 ```
-
-## Demo video
-
-See [`docs/demo-video-script.md`](docs/demo-video-script.md): a 5-minute run through `scripts/demo.sh`, including the
-cut-off export being braked live, a crash-and-restart of the app, and Prometheus counters.
