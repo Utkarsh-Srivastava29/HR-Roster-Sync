@@ -1,0 +1,45 @@
+# One command: docker compose up --build
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: roster
+      POSTGRES_USER: roster
+      POSTGRES_PASSWORD: roster
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U roster -d roster"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DB_URL: jdbc:postgresql://postgres:5432/roster
+      DB_USER: roster
+      DB_PASSWORD: roster
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-prod-0123456789abcdef0123}
+      ROSTER_BRAKE_MAX_MISSING_RATIO: ${ROSTER_BRAKE_MAX_MISSING_RATIO:-0.30}
+    volumes:
+      - exports:/data
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    depends_on: [app]
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./ops/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+volumes:
+  pgdata:
+  exports:

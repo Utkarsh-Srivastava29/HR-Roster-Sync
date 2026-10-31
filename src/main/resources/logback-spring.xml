@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  One JSON object per log line. Context comes from MDC: requestId, tenant, role, eventId, eventType.
+  Nothing here logs request bodies, headers or query strings, so no phone, email or home
+  location can reach the logs.
+-->
+<configuration>
+    <springProfile name="plain">
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    </springProfile>
+    <springProfile name="!plain">
+        <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <includeMdcKeyName>requestId</includeMdcKeyName>
+                <includeMdcKeyName>tenant</includeMdcKeyName>
+                <includeMdcKeyName>role</includeMdcKeyName>
+                <includeMdcKeyName>eventId</includeMdcKeyName>
+                <includeMdcKeyName>eventType</includeMdcKeyName>
+                <includeMdcKeyName>runId</includeMdcKeyName>
+                <fieldNames>
+                    <timestamp>ts</timestamp>
+                    <version>[ignore]</version>
+                    <levelValue>[ignore]</levelValue>
+                </fieldNames>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="JSON"/>
+        </root>
+    </springProfile>
+</configuration>

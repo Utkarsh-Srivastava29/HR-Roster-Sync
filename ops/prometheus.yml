@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+scrape_configs:
+  - job_name: hr-roster-sync
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["app:9091"]   # management port, internal network only

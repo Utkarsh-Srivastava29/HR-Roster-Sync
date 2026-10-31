@@ -1,0 +1,84 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+
+spring:
+  application:
+    name: hr-roster-sync
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  threads:
+    virtual:
+      enabled: true
+  # Default profile runs with the in-memory store and no database at all.
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
+      - org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration
+      - org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
+
+roster:
+  store: memory
+  data-dir: ${ROSTER_DATA_DIR:./data}
+  relay-period-ms: 200
+  demo-seed: true
+  brake:
+    max-missing-ratio: ${ROSTER_BRAKE_MAX_MISSING_RATIO:0.30}
+    require-trailer: ${ROSTER_BRAKE_REQUIRE_TRAILER:true}
+    min-active-for-ratio: 20
+  security:
+    jwt-secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+    token-ttl: 8h
+    # Demo users. Two tenants (acme, globex) to show isolation.
+    users:
+      - { username: acme-hr,      password: ${DEMO_PASSWORD:demo123}, role: ADMIN,    tenant: acme }
+      - { username: acme-ops,     password: ${DEMO_PASSWORD:demo123}, role: OPERATOR, tenant: acme }
+      - { username: acme-emp,     password: ${DEMO_PASSWORD:demo123}, role: EMPLOYEE, tenant: acme, employee-ref: E0000001 }
+      - { username: globex-hr,    password: ${DEMO_PASSWORD:demo123}, role: ADMIN,    tenant: globex }
+      - { username: globex-ops,   password: ${DEMO_PASSWORD:demo123}, role: OPERATOR, tenant: globex }
+
+management:
+  # Metrics and health on their own port; not published by docker compose (Prometheus scrapes it inside the network).
+  server:
+    port: ${MANAGEMENT_PORT:9091}
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: hr-roster-sync
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  autoconfigure:
+    exclude: ""
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/roster}
+    username: ${DB_USER:roster}
+    password: ${DB_PASSWORD:roster}
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 5000
+  sql:
+    init:
+      mode: always
+  transaction:
+    default-timeout: 30s
+
+roster:
+  store: jdbc
