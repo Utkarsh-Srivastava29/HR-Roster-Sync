@@ -1,0 +1,906 @@
+{
+  "info": {
+    "name": "HR Roster Sync",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "hrToken",
+      "value": ""
+    },
+    {
+      "key": "opsToken",
+      "value": ""
+    },
+    {
+      "key": "empToken",
+      "value": ""
+    },
+    {
+      "key": "globexToken",
+      "value": ""
+    },
+    {
+      "key": "runId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login acme-hr",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"acme-hr\",\n  \"password\": \"demo123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('hrToken', pm.response.json().accessToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login acme-ops",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"acme-ops\",\n  \"password\": \"demo123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('opsToken', pm.response.json().accessToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login acme-emp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"acme-emp\",\n  \"password\": \"demo123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('empToken', pm.response.json().accessToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login globex-ops",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"globex-ops\",\n  \"password\": \"demo123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('globexToken', pm.response.json().accessToken);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HR feed",
+      "item": [
+        {
+          "name": "50 new joiners",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hr/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "hr",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"records\": [\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000001\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp1@acme.example\",\n   \"phone\": \"+919800000001\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000002\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp2@acme.example\",\n   \"phone\": \"+919800000002\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000003\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Arjun Menon\",\n   \"email\": \"emp3@acme.example\",\n   \"phone\": \"+919800000003\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000004\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Divya Iyer\",\n   \"email\": \"emp4@acme.example\",\n   \"phone\": \"+919800000004\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000005\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp5@acme.example\",\n   \"phone\": \"+919800000005\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000006\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Neha Das\",\n   \"email\": \"emp6@acme.example\",\n   \"phone\": \"+919800000006\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000007\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Vikram Sharma\",\n   \"email\": \"emp7@acme.example\",\n   \"phone\": \"+919800000007\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000008\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Priya Nair\",\n   \"email\": \"emp8@acme.example\",\n   \"phone\": \"+919800000008\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000009\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Rahul Reddy\",\n   \"email\": \"emp9@acme.example\",\n   \"phone\": \"+919800000009\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000010\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp10@acme.example\",\n   \"phone\": \"+919800000010\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000011\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp11@acme.example\",\n   \"phone\": \"+919800000011\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000012\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp12@acme.example\",\n   \"phone\": \"+919800000012\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000013\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Arjun Menon\",\n   \"email\": \"emp13@acme.example\",\n   \"phone\": \"+919800000013\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000014\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Divya Iyer\",\n   \"email\": \"emp14@acme.example\",\n   \"phone\": \"+919800000014\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000015\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp15@acme.example\",\n   \"phone\": \"+919800000015\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000016\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Neha Das\",\n   \"email\": \"emp16@acme.example\",\n   \"phone\": \"+919800000016\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000017\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Vikram Sharma\",\n   \"email\": \"emp17@acme.example\",\n   \"phone\": \"+919800000017\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000018\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Priya Nair\",\n   \"email\": \"emp18@acme.example\",\n   \"phone\": \"+919800000018\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000019\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Rahul Reddy\",\n   \"email\": \"emp19@acme.example\",\n   \"phone\": \"+919800000019\",\n   \"managerId\": \"E0000001\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000020\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp20@acme.example\",\n   \"phone\": \"+919800000020\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000021\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp21@acme.example\",\n   \"phone\": \"+919800000021\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000022\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp22@acme.example\",\n   \"phone\": \"+919800000022\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000023\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Arjun Menon\",\n   \"email\": \"emp23@acme.example\",\n   \"phone\": \"+919800000023\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000024\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Divya Iyer\",\n   \"email\": \"emp24@acme.example\",\n   \"phone\": \"+919800000024\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000025\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp25@acme.example\",\n   \"phone\": \"+919800000025\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000026\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Neha Das\",\n   \"email\": \"emp26@acme.example\",\n   \"phone\": \"+919800000026\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000027\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Vikram Sharma\",\n   \"email\": \"emp27@acme.example\",\n   \"phone\": \"+919800000027\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000028\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Priya Nair\",\n   \"email\": \"emp28@acme.example\",\n   \"phone\": \"+919800000028\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000029\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Rahul Reddy\",\n   \"email\": \"emp29@acme.example\",\n   \"phone\": \"+919800000029\",\n   \"managerId\": \"E0000002\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000030\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp30@acme.example\",\n   \"phone\": \"+919800000030\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000031\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp31@acme.example\",\n   \"phone\": \"+919800000031\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000032\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp32@acme.example\",\n   \"phone\": \"+919800000032\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000033\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Arjun Menon\",\n   \"email\": \"emp33@acme.example\",\n   \"phone\": \"+919800000033\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000034\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Divya Iyer\",\n   \"email\": \"emp34@acme.example\",\n   \"phone\": \"+919800000034\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000035\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp35@acme.example\",\n   \"phone\": \"+919800000035\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000036\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Neha Das\",\n   \"email\": \"emp36@acme.example\",\n   \"phone\": \"+919800000036\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000037\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Vikram Sharma\",\n   \"email\": \"emp37@acme.example\",\n   \"phone\": \"+919800000037\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000038\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Priya Nair\",\n   \"email\": \"emp38@acme.example\",\n   \"phone\": \"+919800000038\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000039\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Rahul Reddy\",\n   \"email\": \"emp39@acme.example\",\n   \"phone\": \"+919800000039\",\n   \"managerId\": \"E0000003\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000040\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp40@acme.example\",\n   \"phone\": \"+919800000040\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000041\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp41@acme.example\",\n   \"phone\": \"+919800000041\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000042\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp42@acme.example\",\n   \"phone\": \"+919800000042\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000043\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Arjun Menon\",\n   \"email\": \"emp43@acme.example\",\n   \"phone\": \"+919800000043\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000044\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Divya Iyer\",\n   \"email\": \"emp44@acme.example\",\n   \"phone\": \"+919800000044\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000045\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp45@acme.example\",\n   \"phone\": \"+919800000045\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000046\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Neha Das\",\n   \"email\": \"emp46@acme.example\",\n   \"phone\": \"+919800000046\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"BLR2\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000047\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Vikram Sharma\",\n   \"email\": \"emp47@acme.example\",\n   \"phone\": \"+919800000047\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000048\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Priya Nair\",\n   \"email\": \"emp48@acme.example\",\n   \"phone\": \"+919800000048\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"PUN1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000049\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Rahul Reddy\",\n   \"email\": \"emp49@acme.example\",\n   \"phone\": \"+919800000049\",\n   \"managerId\": \"E0000004\",\n   \"officeCode\": \"CHN1\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000050\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp50@acme.example\",\n   \"phone\": \"+919800000050\",\n   \"managerId\": \"E0000005\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"NIGHT\"\n  }\n ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Transfer v7 (arrives first)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hr/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "hr",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"records\": [\n  {\n   \"type\": \"UPDATE\",\n   \"employeeId\": \"E0000001\",\n   \"version\": 7,\n   \"sourceTime\": \"2026-10-30T10:07:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp1@acme.example\",\n   \"phone\": \"+919800000001\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  }\n ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Shift change v6 (arrives late -> STALE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hr/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "hr",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"records\": [\n  {\n   \"type\": \"UPDATE\",\n   \"employeeId\": \"E0000001\",\n   \"version\": 6,\n   \"sourceTime\": \"2026-10-30T10:06:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp1@acme.example\",\n   \"phone\": \"+919800000001\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"EVE\"\n  }\n ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Mixed batch with bad records",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hr/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "hr",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"records\": [\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000060\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Asha Rao\",\n   \"email\": \"emp60@acme.example\",\n   \"phone\": \"98-ABC\",\n   \"managerId\": \"E0000006\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"GEN\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000061\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Ravi Patel\",\n   \"email\": \"emp61@acme.example\",\n   \"phone\": \"+919800000061\",\n   \"managerId\": \"E0000006\",\n   \"officeCode\": \"MARS\",\n   \"shiftCode\": \"EVE\"\n  },\n  {\n   \"type\": \"UPDATE\",\n   \"employeeId\": \"E0000005\",\n   \"version\": 2,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Kiran Singh\",\n   \"email\": \"emp5@acme.example\",\n   \"phone\": \"+919800000005\",\n   \"officeCode\": \"BLR1\",\n   \"shiftCode\": \"NIGHT\",\n   \"pickupPoint\": \"HR should not set this\"\n  },\n  {\n   \"type\": \"CREATE\",\n   \"employeeId\": \"E0000062\",\n   \"version\": 1,\n   \"sourceTime\": \"2026-10-30T09:00:00Z\",\n   \"name\": \"Meera Gupta\",\n   \"email\": \"emp62@acme.example\",\n   \"phone\": \"+919800000062\",\n   \"managerId\": \"E0000006\",\n   \"officeCode\": \"HYD1\",\n   \"shiftCode\": \"NIGHT\"\n  }\n ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Deactivate E0000002",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hr/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "hr",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"records\": [\n  {\n   \"type\": \"DEACTIVATE\",\n   \"employeeId\": \"E0000002\",\n   \"version\": 2,\n   \"sourceTime\": \"2026-10-30T11:00:00Z\"\n  }\n ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "Get E0000001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/E0000001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "employees",
+                "E0000001"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Set pickup point (transport-owned)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/E0000005/transport",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "employees",
+                "E0000005",
+                "transport"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickupPoint\": \"Gate 4, Tech Park\",\n  \"specialAssistance\": [\n    \"WHEELCHAIR\"\n  ],\n  \"expectedVersion\": 0\n}"
+            }
+          }
+        },
+        {
+          "name": "Bookings of E0000002",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/E0000002/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "employees",
+                "E0000002",
+                "bookings"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Book a seat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bookings"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": \"E0000002\",\n  \"routeId\": \"R1\",\n  \"pickupAt\": \"2030-01-02T08:00:00Z\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Route R1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/routes/R1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "routes",
+                "R1"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Me (employee)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "me"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{empToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nightly reconciliation",
+      "item": [
+        {
+          "name": "Upload cut-off export (brakes)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/csv"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "#EXPORT taken_at=2026-10-30T23:00:00Z\nemployee_id,version,source_time,name,email,phone,manager_id,office_code,shift_code\nE0000001,7,2026-10-30T10:07:00Z,Ravi Patel,emp1@acme.example,+919800000001,,HYD1,NIGHT\nE0000003,2,2026-10-30T09:00:00Z,Arjun Menon,emp3@acme.example,+919800000003,,PUN1,GEN\nE0000004,2,2026-10-30T09:00:00Z,Divya Iyer,emp4@acme.example,+919800000004,,PUN1,EVE\nE0000005,2,2026-10-30T09:00:00Z,Kiran Singh,emp5@acme.example,+919800000005,,BLR1,NIGHT\nE0000006,1,2026-10-30T09:00:00Z,Neha Das,emp6@acme.example,+919800000006,,BLR2,GEN\nE0000007,1,2026-10-30T09:00:00Z,Vikram Sharma,emp7@acme.example,+919800000007,,HYD1,EVE\nE0000008,1,2026-10-30T09:00:00Z,Priya Nair,emp8@acme.example,+919800000008,,PUN1,NIGHT\nE0000009,1,2026-10-30T09:00:00Z,Rahul Reddy,emp9@acme.example,+919800000009,,CHN1,GEN\nE0000010,1,2026-10-30T09:00:00Z,Asha Rao,emp10@acme.example,+919800000010,E0000001,BLR1,EVE\nE0000011,1,2026-10-30T09:00:00Z,Ravi Patel,emp11@acme.example,+919800000011,E0000001,BLR2,NIGHT\nE0000012,1,2026-10-30T09:00:00Z,Meera Gupta,emp12@acme.example,+919800000012,E0000001,HYD1,GEN\nE0000013,1,2026-10-30T09:00:00Z,Arjun Menon,emp13@acme.example,+919800000013,E0000001,PUN1,EVE\nE0000014,1,2026-10-30T09:00:00Z,Divya Iyer,emp14@acme.example,+919800000014,E0000001,CHN1,NIGHT\nE0000015,1,2026-10-30T09:00:00Z,Kiran Singh,emp15@acme.example,+919800000015,E0000001,BLR1,GEN\nE0000016,1,2026-10-30T09:00:00Z,Neha Das,emp16@acme.example,+919800000016,E0000001,BLR2,EVE\nE0000017,1,2026-10-30T09:00:00Z,Vikram Sharma,emp17@acme.example,+919800000017,E0000001,HYD1,NIGHT\nE0000018,1,2026-10-30T09:00:00Z,Priya Nair,emp18@acme.example,+919800000018,E0000001,PUN1,GEN\nE0000019,1,2026-10-30T09:00:00Z,Rahul Reddy,emp19@acme.example,+919800000019,E0000001,CHN1,EVE\nE0000020,1,2026-10-30T09:00:00Z,Asha Rao,emp20@acme.example,+919800000020,E0000002,BLR1,NIGHT\nE0000021,1,2026-10-30T09:00:00Z,Ravi Patel,emp21@acme.example,+919800000021,E0000002,BLR2,GEN\n"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('runId', pm.response.json().runId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get run",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations/{{runId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations",
+                "{{runId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve run (operator)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations/{{runId}}/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations",
+                "{{runId}}",
+                "approve"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject run (operator)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations/{{runId}}/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations",
+                "{{runId}}",
+                "reject"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload good export",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/csv"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{hrToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "#EXPORT taken_at=2026-10-30T23:00:00Z\nemployee_id,version,source_time,name,email,phone,manager_id,office_code,shift_code\nE0000001,7,2026-10-30T10:07:00Z,Ravi Patel,emp1@acme.example,+919800000001,,HYD1,NIGHT\nE0000003,2,2026-10-30T09:00:00Z,Arjun Menon,emp3@acme.example,+919800000003,,PUN1,GEN\nE0000004,2,2026-10-30T09:00:00Z,Divya Iyer,emp4@acme.example,+919800000004,,PUN1,EVE\nE0000005,2,2026-10-30T09:00:00Z,Kiran Singh,emp5@acme.example,+919800000005,,BLR1,NIGHT\nE0000006,1,2026-10-30T09:00:00Z,Neha Das,emp6@acme.example,+919800000006,,BLR2,GEN\nE0000007,1,2026-10-30T09:00:00Z,Vikram Sharma,emp7@acme.example,+919800000007,,HYD1,EVE\nE0000008,1,2026-10-30T09:00:00Z,Priya Nair,emp8@acme.example,+919800000008,,PUN1,NIGHT\nE0000009,1,2026-10-30T09:00:00Z,Rahul Reddy,emp9@acme.example,+919800000009,,CHN1,GEN\nE0000010,1,2026-10-30T09:00:00Z,Asha Rao,emp10@acme.example,+919800000010,E0000001,BLR1,EVE\nE0000011,1,2026-10-30T09:00:00Z,Ravi Patel,emp11@acme.example,+919800000011,E0000001,BLR2,NIGHT\nE0000012,1,2026-10-30T09:00:00Z,Meera Gupta,emp12@acme.example,+919800000012,E0000001,HYD1,GEN\nE0000013,1,2026-10-30T09:00:00Z,Arjun Menon,emp13@acme.example,+919800000013,E0000001,PUN1,EVE\nE0000014,1,2026-10-30T09:00:00Z,Divya Iyer,emp14@acme.example,+919800000014,E0000001,CHN1,NIGHT\nE0000015,1,2026-10-30T09:00:00Z,Kiran Singh,emp15@acme.example,+919800000015,E0000001,BLR1,GEN\nE0000016,1,2026-10-30T09:00:00Z,Neha Das,emp16@acme.example,+919800000016,E0000001,BLR2,EVE\nE0000017,1,2026-10-30T09:00:00Z,Vikram Sharma,emp17@acme.example,+919800000017,E0000001,HYD1,NIGHT\nE0000018,1,2026-10-30T09:00:00Z,Priya Nair,emp18@acme.example,+919800000018,E0000001,PUN1,GEN\nE0000019,1,2026-10-30T09:00:00Z,Rahul Reddy,emp19@acme.example,+919800000019,E0000001,CHN1,EVE\nE0000020,1,2026-10-30T09:00:00Z,Asha Rao,emp20@acme.example,+919800000020,E0000002,BLR1,NIGHT\nE0000021,1,2026-10-30T09:00:00Z,Ravi Patel,emp21@acme.example,+919800000021,E0000002,BLR2,GEN\nE0000022,1,2026-10-30T09:00:00Z,Meera Gupta,emp22@acme.example,+919800000022,E0000002,HYD1,EVE\nE0000023,1,2026-10-30T09:00:00Z,Arjun Menon,emp23@acme.example,+919800000023,E0000002,PUN1,NIGHT\nE0000024,1,2026-10-30T09:00:00Z,Divya Iyer,emp24@acme.example,+919800000024,E0000002,CHN1,GEN\nE0000025,1,2026-10-30T09:00:00Z,Kiran Singh,emp25@acme.example,+919800000025,E0000002,BLR1,EVE\nE0000026,1,2026-10-30T09:00:00Z,Neha Das,emp26@acme.example,+919800000026,E0000002,BLR2,NIGHT\nE0000027,1,2026-10-30T09:00:00Z,Vikram Sharma,emp27@acme.example,+919800000027,E0000002,HYD1,GEN\nE0000028,1,2026-10-30T09:00:00Z,Priya Nair,emp28@acme.example,+919800000028,E0000002,PUN1,EVE\nE0000029,1,2026-10-30T09:00:00Z,Rahul Reddy,emp29@acme.example,+919800000029,E0000002,CHN1,NIGHT\nE0000030,1,2026-10-30T09:00:00Z,Asha Rao,emp30@acme.example,+919800000030,E0000003,BLR1,GEN\nE0000031,1,2026-10-30T09:00:00Z,Ravi Patel,emp31@acme.example,+919800000031,E0000003,BLR2,EVE\nE0000032,1,2026-10-30T09:00:00Z,Meera Gupta,emp32@acme.example,+919800000032,E0000003,HYD1,NIGHT\nE0000033,1,2026-10-30T09:00:00Z,Arjun Menon,emp33@acme.example,+919800000033,E0000003,PUN1,GEN\nE0000034,1,2026-10-30T09:00:00Z,Divya Iyer,emp34@acme.example,+919800000034,E0000003,CHN1,EVE\nE0000035,1,2026-10-30T09:00:00Z,Kiran Singh,emp35@acme.example,+919800000035,E0000003,BLR1,NIGHT\nE0000036,1,2026-10-30T09:00:00Z,Neha Das,emp36@acme.example,+919800000036,E0000003,BLR2,GEN\nE0000037,1,2026-10-30T09:00:00Z,Vikram Sharma,emp37@acme.example,+919800000037,E0000003,HYD1,EVE\nE0000038,1,2026-10-30T09:00:00Z,Priya Nair,emp38@acme.example,+919800000038,E0000003,PUN1,NIGHT\nE0000039,1,2026-10-30T09:00:00Z,Rahul Reddy,emp39@acme.example,+919800000039,E0000003,CHN1,GEN\nE0000040,1,2026-10-30T09:00:00Z,Asha Rao,emp40@acme.example,+919800000040,E0000004,BLR1,EVE\nE0000041,1,2026-10-30T09:00:00Z,Ravi Patel,emp41@acme.example,+919800000041,E0000004,BLR2,NIGHT\nE0000042,1,2026-10-30T09:00:00Z,Meera Gupta,emp42@acme.example,+919800000042,E0000004,HYD1,GEN\nE0000043,1,2026-10-30T09:00:00Z,Arjun Menon,emp43@acme.example,+919800000043,E0000004,PUN1,EVE\nE0000044,1,2026-10-30T09:00:00Z,Divya Iyer,emp44@acme.example,+919800000044,E0000004,CHN1,NIGHT\nE0000045,1,2026-10-30T09:00:00Z,Kiran Singh,emp45@acme.example,+919800000045,E0000004,BLR1,GEN\nE0000046,1,2026-10-30T09:00:00Z,Neha Das,emp46@acme.example,+919800000046,E0000004,BLR2,EVE\nE0000047,1,2026-10-30T09:00:00Z,Vikram Sharma,emp47@acme.example,+919800000047,E0000004,HYD1,NIGHT\nE0000048,1,2026-10-30T09:00:00Z,Priya Nair,emp48@acme.example,+919800000048,E0000004,PUN1,GEN\nE0000062,1,2026-10-30T09:00:00Z,Meera Gupta,emp62@acme.example,+919800000062,E0000006,HYD1,NIGHT\nE0000051,1,2026-10-30T09:00:00Z,Ravi Patel,emp51@acme.example,+919800000051,E0000005,BLR2,GEN\n#END rows=49\n"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('runId', pm.response.json().runId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List runs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reconciliations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reconciliations"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Downstream & health",
+      "item": [
+        {
+          "name": "Change feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/changes?after=0&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "changes"
+              ],
+              "query": [
+                {
+                  "key": "after",
+                  "value": "0"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Outbox status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/outbox/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "outbox",
+                "status"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{opsToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Other tenant cannot read acme (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/E0000001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "employees",
+                "E0000001"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{globexToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

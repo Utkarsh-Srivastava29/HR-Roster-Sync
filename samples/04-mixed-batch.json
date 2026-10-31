@@ -1,0 +1,52 @@
+{
+ "records": [
+  {
+   "type": "CREATE",
+   "employeeId": "E0000060",
+   "version": 1,
+   "sourceTime": "2026-10-30T09:00:00Z",
+   "name": "Asha Rao",
+   "email": "emp60@acme.example",
+   "phone": "98-ABC",
+   "managerId": "E0000006",
+   "officeCode": "BLR1",
+   "shiftCode": "GEN"
+  },
+  {
+   "type": "CREATE",
+   "employeeId": "E0000061",
+   "version": 1,
+   "sourceTime": "2026-10-30T09:00:00Z",
+   "name": "Ravi Patel",
+   "email": "emp61@acme.example",
+   "phone": "+919800000061",
+   "managerId": "E0000006",
+   "officeCode": "MARS",
+   "shiftCode": "EVE"
+  },
+  {
+   "type": "UPDATE",
+   "employeeId": "E0000005",
+   "version": 2,
+   "sourceTime": "2026-10-30T09:00:00Z",
+   "name": "Kiran Singh",
+   "email": "emp5@acme.example",
+   "phone": "+919800000005",
+   "officeCode": "BLR1",
+   "shiftCode": "NIGHT",
+   "pickupPoint": "HR should not set this"
+  },
+  {
+   "type": "CREATE",
+   "employeeId": "E0000062",
+   "version": 1,
+   "sourceTime": "2026-10-30T09:00:00Z",
+   "name": "Meera Gupta",
+   "email": "emp62@acme.example",
+   "phone": "+919800000062",
+   "managerId": "E0000006",
+   "officeCode": "HYD1",
+   "shiftCode": "NIGHT"
+  }
+ ]
+}

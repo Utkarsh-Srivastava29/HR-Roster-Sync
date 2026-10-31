@@ -1,0 +1,15 @@
+{
+ "records": [
+  {
+   "type": "UPDATE",
+   "employeeId": "E0000001",
+   "version": 6,
+   "sourceTime": "2026-10-30T10:06:00Z",
+   "name": "Ravi Patel",
+   "email": "emp1@acme.example",
+   "phone": "+919800000001",
+   "officeCode": "BLR1",
+   "shiftCode": "EVE"
+  }
+ ]
+}
