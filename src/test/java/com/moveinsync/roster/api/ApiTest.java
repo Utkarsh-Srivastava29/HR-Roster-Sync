@@ -45,9 +45,9 @@ class ApiTest {
     @Test
     void batchReportIsPerRecordAndNeverEchoesValues() throws Exception {
         String hr = token("acme-hr");
-        String body = "{\"records\":[" + record("CREATE", "E0000001", 1, "BLR1", "+919800000001") + ","
-                + record("CREATE", "E0000002", 1, "MARS", "+919800000002") + ","
-                + record("CREATE", "E0000003", 1, "BLR1", "98-ABC") + "]}";
+        String body = "{\"records\":[" + record("CREATE", "E0000101", 1, "BLR1", "+919800000101") + ","
+                + record("CREATE", "E0000102", 1, "MARS", "+919800000102") + ","
+                + record("CREATE", "E0000103", 1, "BLR1", "98-ABC") + "]}";
         String res = mvc.perform(post("/api/v1/hr/events").header("Authorization", hr)
                         .contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isOk())
@@ -102,7 +102,7 @@ class ApiTest {
     }
 
     @Test
-    void braceForATruncatedExportThroughTheApi() throws Exception {
+    void brakeStopsATruncatedExportThroughTheApi() throws Exception {
         String hr = token("acme-hr");
         StringBuilder recs = new StringBuilder("{\"records\":[");
         for (int i = 100; i < 160; i++) recs.append(i == 100 ? "" : ",").append(record("CREATE", "E00001" + i, 1, "BLR1", "+9198000" + (10000 + i)));
@@ -126,7 +126,7 @@ class ApiTest {
         }
         assertEquals("BRAKED", r.get("status").asText());
         assertTrue(r.get("brake").get("appearsMissing").asLong() >= 40);
-        mvc.perform(get("/api/v1/employees/E0000159").header("Authorization", ops)).andExpect(jsonPath("$.status").value("ACTIVE"));
+        mvc.perform(get("/api/v1/employees/E00001159").header("Authorization", ops)).andExpect(jsonPath("$.status").value("ACTIVE"));
         mvc.perform(post("/api/v1/reconciliations/" + runId + "/approve").header("Authorization", hr)).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/reconciliations/" + runId + "/reject").header("Authorization", ops)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("REJECTED"));
